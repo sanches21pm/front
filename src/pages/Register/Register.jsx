@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import './Register.css';
 
 const Register = ({ setIsAuthenticated }) => {
@@ -10,7 +9,6 @@ const Register = ({ setIsAuthenticated }) => {
   const [role, setRole] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,14 +22,25 @@ const Register = ({ setIsAuthenticated }) => {
         role
       });
       if (response.status === 201) {
-        const { access_token } = response.data;
-        localStorage.setItem('access_token', access_token);
-        setIsAuthenticated(true);
         setMessage('Регистрация выполнена успешно!');
-        navigate('/products'); // Перенаправляем на страницу с продуктами
+        // Сохраняем токен при регистрации, если сервер его возвращает
+        const { access_token } = response.data;
+        if (access_token) {
+          localStorage.setItem('access_token', access_token);
+          setIsAuthenticated(true);
+        }
+        // Очищаем поля после успешной регистрации
+        setUsername('');
+        setEmail('');
+        setPassword('');
+        setRole('');
       }
     } catch (error) {
-      setMessage('Ошибка регистрации. Попробуйте снова.');
+      if (error.response && error.response.status === 400) {
+        setMessage('Имя пользователя уже существует');
+      } else {
+        setMessage('Регистрация не удалась. Попробуйте снова.');
+      }
     } finally {
       setLoading(false);
     }
