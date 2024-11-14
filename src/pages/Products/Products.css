@@ -26,7 +26,13 @@
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
 
-/* Стиль для карточки добавления продукта */
+.product-image {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
 .add-product-card {
   display: flex;
   flex-direction: column;
@@ -44,16 +50,11 @@
   transition: color 0.2s ease;
 }
 
-.add-product-icon:hover {
-  color: #0056b3;
-}
-
 .add-product-text {
   font-size: 18px;
   color: #007bff;
 }
 
-/* Стили для текста продукта */
 .product-name {
   font-size: 20px;
   font-weight: 600;
@@ -69,5 +70,5 @@
 
 .product-description {
   font-size: 14px;
-  color: #ff4d4d;
+  color: #666;
 }

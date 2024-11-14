@@ -10,7 +10,6 @@ const Products = () => {
   const [isSeller, setIsSeller] = useState(false);
   const navigate = useNavigate();
 
-  // Получение профиля пользователя
   const fetchProfile = async () => {
     const token = localStorage.getItem('access_token');
     try {
@@ -25,7 +24,6 @@ const Products = () => {
     }
   };
 
-  // Получение списка продуктов
   const fetchProducts = async () => {
     const token = localStorage.getItem('access_token');
     try {
@@ -47,12 +45,10 @@ const Products = () => {
     fetchProducts();
   }, []);
 
-  // Переход к добавлению продукта
   const handleAddProduct = () => {
     navigate('/add-product');
   };
 
-  // Переход на страницу с деталями продукта
   const handleProductClick = (productId) => {
     navigate(`/products/${productId}`);
   };
@@ -76,6 +72,13 @@ const Products = () => {
                   key={product.id}
                   onClick={() => handleProductClick(product.id)}
               >
+                {product.image_url && (
+                    <img
+                        src={product.image_url}
+                        alt={product.name}
+                        className="product-image"
+                    />
+                )}
                 <h3 className="product-name">{product.name}</h3>
                 <p className="product-price">${product.price}</p>
                 <p className="product-description">{product.description}</p>

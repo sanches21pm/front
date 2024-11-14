@@ -1,0 +1,45 @@
+.about-us-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+.about-us-container h1 {
+    text-align: center;
+    color: #007bff;
+}
+
+.about-us-container p {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+}
+
+.feature {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-left: 4px solid #007bff;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.feature h3 {
+    color: #333;
+    font-size: 18px;
+}
+
+.feature p {
+    color: #666;
+    font-size: 14px;
+}
+
+.about-us-container h2 {
+    color: #007bff;
+    font-size: 20px;
+    margin-top: 30px;
+}

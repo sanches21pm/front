@@ -8,7 +8,6 @@ const CategoryDetail = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Функция для получения продуктов категории
   const fetchCategoryProducts = async () => {
     try {
       const response = await axios.get(`https://sanches.pythonanywhere.com/categories/${category_id}/products`);
@@ -37,6 +36,13 @@ const CategoryDetail = () => {
             <div className="products-grid">
               {products.map((product) => (
                   <div className="product-card" key={product.id}>
+                    {product.image_url && (
+                        <img
+                            src={product.image_url}
+                            alt={product.name}
+                            className="product-image"
+                        />
+                    )}
                     <h3 className="product-name">{product.name}</h3>
                     <p className="product-price">${product.price}</p>
                     <p className="product-description">{product.description}</p>

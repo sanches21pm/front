@@ -18,6 +18,7 @@ import './App.css';
 
 import AddProduct from './pages/Products/AddProduct';
 import AddCategory from './pages/AddCategory/AddCategory';
+import AboutUs from './pages/AboutUs/AboutUs'; // Import the AboutUs page
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -53,7 +54,7 @@ const App = () => {
             <Route path="/register_admin" element={<PrivateRoute element={RegisterAdmin} />} />
             <Route path="/add-product" element={<AddProduct />} />
             <Route path="/add-category" element={<AddCategory />} />
-
+            <Route path="/about-us" element={<AboutUs />} /> {/* Add the About Us route */}
           </Routes>
         </Router>
       </ThemeProvider>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FaUser } from 'react-icons/fa'; // Иконка пользователя
+import { FaUser } from 'react-icons/fa';
 import './Header.css';
 
 const Header = () => {
@@ -9,7 +9,6 @@ const Header = () => {
   const [profile, setProfile] = useState(null);
   const navigate = useNavigate();
 
-  // Проверяем, есть ли токен в localStorage при загрузке
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     if (token) {
@@ -18,7 +17,6 @@ const Header = () => {
     }
   }, []);
 
-  // Функция для получения данных профиля
   const fetchProfile = async (token) => {
     try {
       const response = await axios.get('https://sanches.pythonanywhere.com/profile', {
@@ -34,7 +32,6 @@ const Header = () => {
     }
   };
 
-  // Функция выхода из аккаунта
   const handleLogout = () => {
     localStorage.removeItem('access_token');
     setIsAuthenticated(false);
@@ -54,16 +51,17 @@ const Header = () => {
             )}
           </div>
           <nav>
+            <Link to="/" className="nav-button">Главная</Link>
+            <Link to="/about-us" className="nav-button">О нас</Link> {/* New About Us link */}
+            <Link to="/categories" className="nav-button">Категории</Link>
+            <Link to="/products" className="nav-button">Продукты</Link>
             {isAuthenticated ? (
                 <>
                   <Link to="/profile" className="nav-button">Профиль</Link>
-                  <Link to="/categories" className="nav-button">Категории</Link>
-                  <Link to="/products" className="nav-button">Продукты</Link>
                   <button className="nav-button" onClick={handleLogout}>Выйти</button>
                 </>
             ) : (
                 <>
-                  <Link to="/login" className="nav-button">Вход</Link>
                   <Link to="/register" className="nav-button">Регистрация</Link>
                 </>
             )}

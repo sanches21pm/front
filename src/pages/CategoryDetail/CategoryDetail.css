@@ -34,3 +34,9 @@
     font-size: 14px;
     color: #666;
 }
+.product-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}

@@ -2,55 +2,34 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './Register.css';
 
-const Register = ({ setIsAuthenticated }) => {
+const Register = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('');
+  const [role, setRole] = useState('user'); // Установим по умолчанию 'user'
   const [message, setMessage] = useState('');
-  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setMessage('');
     try {
-      const response = await axios.post('https://sanches.pythonanywhere.com/register', {
+      await axios.post('https://sanches.pythonanywhere.com/register', {
         username,
         email,
         password,
-        role
+        role, // Отправляем роль
       });
-      if (response.status === 201) {
-        setMessage('Регистрация выполнена успешно!');
-        // Сохраняем токен при регистрации, если сервер его возвращает
-        const { access_token } = response.data;
-        if (access_token) {
-          localStorage.setItem('access_token', access_token);
-          setIsAuthenticated(true);
-        }
-        // Очищаем поля после успешной регистрации
-        setUsername('');
-        setEmail('');
-        setPassword('');
-        setRole('');
-      }
+      setMessage('Регистрация прошла успешно!');
     } catch (error) {
-      if (error.response && error.response.status === 400) {
-        setMessage('Имя пользователя уже существует');
-      } else {
-        setMessage('Регистрация не удалась. Попробуйте снова.');
-      }
-    } finally {
-      setLoading(false);
+      console.error('Ошибка регистрации:', error);
+      setMessage('Не удалось зарегистрироваться. Попробуйте снова.');
     }
   };
 
   return (
       <div className="register-container">
+        <h2>Регистрация</h2>
+        {message && <p className="message">{message}</p>}
         <form onSubmit={handleSubmit}>
-          <h2>Регистрация</h2>
-          {message && <p>{message}</p>}
           <input
               type="text"
               placeholder="Имя пользователя"
@@ -60,7 +39,7 @@ const Register = ({ setIsAuthenticated }) => {
           />
           <input
               type="email"
-              placeholder="Email"
+              placeholder="Электронная почта"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -72,16 +51,15 @@ const Register = ({ setIsAuthenticated }) => {
               onChange={(e) => setPassword(e.target.value)}
               required
           />
-          <input
-              type="text"
-              placeholder="Роль"
+          <select
               value={role}
               onChange={(e) => setRole(e.target.value)}
               required
-          />
-          <button type="submit" disabled={loading}>
-            {loading ? 'Регистрация...' : 'Зарегистрироваться'}
-          </button>
+          >
+            <option value="user">Пользователь</option>
+            <option value="seller">Продавец</option>
+          </select>
+          <button type="submit">Зарегистрироваться</button>
         </form>
       </div>
   );

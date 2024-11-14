@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa';
 import './ProductDetail.css';
 
@@ -11,9 +11,8 @@ const ProductDetail = () => {
   const [newReview, setNewReview] = useState('');
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(null);
-  const [role, setRole] = useState('');
+  const [userId, setUserId] = useState(null);
   const [message, setMessage] = useState('');
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,7 +27,7 @@ const ProductDetail = () => {
         const profileResponse = await axios.get('https://sanches.pythonanywhere.com/profile', {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setRole(profileResponse.data.role);
+        setUserId(profileResponse.data.id);  // Получаем ID текущего пользователя
 
         const reviewsResponse = await axios.get(`https://sanches.pythonanywhere.com/products/${product_id}/reviews`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -103,7 +102,7 @@ const ProductDetail = () => {
                             ))}
                           </div>
                           <p className="review-content">{review.content}</p>
-                          {(role === 'admin' || role === 'user') && (
+                          {review.user_id === userId && (
                               <button
                                   onClick={() => handleDeleteReview(review.id)}
                                   className="delete-review-button"
@@ -118,35 +117,33 @@ const ProductDetail = () => {
                 )}
               </div>
 
-              {role === 'user' && (
-                  <div className="add-review-form">
-                    <h3>Добавить отзыв</h3>
-                    <div className="rating-stars">
-                      {[...Array(5)].map((star, index) => {
-                        const ratingValue = index + 1;
-                        return (
-                            <FaStar
-                                key={index}
-                                className="star"
-                                color={ratingValue <= (hover || rating) ? '#ffc107' : '#e4e5e9'}
-                                size={30}
-                                onClick={() => setRating(ratingValue)}
-                                onMouseEnter={() => setHover(ratingValue)}
-                                onMouseLeave={() => setHover(null)}
-                            />
-                        );
-                      })}
-                    </div>
-                    <textarea
-                        placeholder="Введите ваш отзыв"
-                        value={newReview}
-                        onChange={(e) => setNewReview(e.target.value)}
-                    />
-                    <button onClick={handleAddReview} className="add-review-button">
-                      Оставить отзыв
-                    </button>
-                  </div>
-              )}
+              <div className="add-review-form">
+                <h3>Добавить отзыв</h3>
+                <div className="rating-stars">
+                  {[...Array(5)].map((star, index) => {
+                    const ratingValue = index + 1;
+                    return (
+                        <FaStar
+                            key={index}
+                            className="star"
+                            color={ratingValue <= (hover || rating) ? '#ffc107' : '#e4e5e9'}
+                            size={30}
+                            onClick={() => setRating(ratingValue)}
+                            onMouseEnter={() => setHover(ratingValue)}
+                            onMouseLeave={() => setHover(null)}
+                        />
+                    );
+                  })}
+                </div>
+                <textarea
+                    placeholder="Введите ваш отзыв"
+                    value={newReview}
+                    onChange={(e) => setNewReview(e.target.value)}
+                />
+                <button onClick={handleAddReview} className="add-review-button">
+                  Оставить отзыв
+                </button>
+              </div>
             </>
         ) : (
             <p>Загрузка...</p>
