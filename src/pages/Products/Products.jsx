@@ -6,10 +6,14 @@ import './Products.css';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
   const [loading, setLoading] = useState(true);
   const [isSeller, setIsSeller] = useState(false);
   const navigate = useNavigate();
 
+  // Fetch user profile to check if the user is a seller
   const fetchProfile = async () => {
     const token = localStorage.getItem('access_token');
     try {
@@ -24,6 +28,7 @@ const Products = () => {
     }
   };
 
+  // Fetch products
   const fetchProducts = async () => {
     const token = localStorage.getItem('access_token');
     try {
@@ -33,6 +38,7 @@ const Products = () => {
         },
       });
       setProducts(response.data);
+      setFilteredProducts(response.data); // Initially display all products
     } catch (error) {
       console.error('Ошибка загрузки продуктов:', error);
     } finally {
@@ -40,9 +46,30 @@ const Products = () => {
     }
   };
 
+  // Fetch categories for the filter dropdown
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get('https://sanches.pythonanywhere.com/categories');
+      setCategories(response.data);
+    } catch (error) {
+      console.error('Ошибка загрузки категорий:', error);
+    }
+  };
+
+  // Apply filter when the selected category changes
+  useEffect(() => {
+    if (selectedCategory) {
+      setFilteredProducts(products.filter(product => product.category_id === parseInt(selectedCategory)));
+    } else {
+      setFilteredProducts(products); // Show all products when no category is selected
+    }
+  }, [selectedCategory, products]);
+
+  // Initial data fetch
   useEffect(() => {
     fetchProfile();
     fetchProducts();
+    fetchCategories();
   }, []);
 
   const handleAddProduct = () => {
@@ -59,6 +86,23 @@ const Products = () => {
 
   return (
       <div className="products-container">
+        {/* Category Filter */}
+        <div className="category-filter">
+          <label htmlFor="category-select">Фильтр по категории: </label>
+          <select
+              id="category-select"
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+          >
+            <option value="">Все категории</option>
+            {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+            ))}
+          </select>
+        </div>
+
         <div className="products-grid">
           {isSeller && (
               <div className="product-card add-product-card" onClick={handleAddProduct}>
@@ -66,7 +110,7 @@ const Products = () => {
                 <h3 className="add-product-text">Добавить продукт</h3>
               </div>
           )}
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
               <div
                   className="product-card"
                   key={product.id}

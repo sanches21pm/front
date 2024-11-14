@@ -18,7 +18,9 @@ import './App.css';
 
 import AddProduct from './pages/Products/AddProduct';
 import AddCategory from './pages/AddCategory/AddCategory';
-import AboutUs from './pages/AboutUs/AboutUs'; // Import the AboutUs page
+import AboutUs from './pages/AboutUs/AboutUs';
+import EditProduct from './pages/Products/EditProduct.jsx';
+
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -55,6 +57,7 @@ const App = () => {
             <Route path="/add-product" element={<AddProduct />} />
             <Route path="/add-category" element={<AddCategory />} />
             <Route path="/about-us" element={<AboutUs />} /> {/* Add the About Us route */}
+            <Route path="/edit-product/:product_id" element={<EditProduct />} /> {/* New Route */}
           </Routes>
         </Router>
       </ThemeProvider>

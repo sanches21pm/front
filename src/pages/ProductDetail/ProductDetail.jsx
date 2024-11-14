@@ -12,6 +12,7 @@ const ProductDetail = () => {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [userRole, setUserRole] = useState('');
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -27,7 +28,8 @@ const ProductDetail = () => {
         const profileResponse = await axios.get('https://sanches.pythonanywhere.com/profile', {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setUserId(profileResponse.data.id);  // Получаем ID текущего пользователя
+        setUserId(profileResponse.data.id);
+        setUserRole(profileResponse.data.role); // Storing user role
 
         const reviewsResponse = await axios.get(`https://sanches.pythonanywhere.com/products/${product_id}/reviews`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -102,7 +104,7 @@ const ProductDetail = () => {
                             ))}
                           </div>
                           <p className="review-content">{review.content}</p>
-                          {review.user_id === userId && (
+                          {(review.user_id === userId || userRole === 'admin') && ( // Admin can delete any review
                               <button
                                   onClick={() => handleDeleteReview(review.id)}
                                   className="delete-review-button"
