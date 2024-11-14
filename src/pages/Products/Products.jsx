@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { FaPlusCircle } from 'react-icons/fa';
+import { FaPlusCircle, FaEdit, FaTrash } from 'react-icons/fa';
 import './Products.css';
 
 const Products = () => {
@@ -10,10 +10,10 @@ const Products = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [loading, setLoading] = useState(true);
-  const [isSeller, setIsSeller] = useState(false);
+  const [userRole, setUserRole] = useState('');
   const navigate = useNavigate();
 
-  // Fetch user profile to check if the user is a seller
+  // Fetch user profile to check if the user is a seller or admin
   const fetchProfile = async () => {
     const token = localStorage.getItem('access_token');
     try {
@@ -22,7 +22,7 @@ const Products = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setIsSeller(response.data.role === 'seller');
+      setUserRole(response.data.role);
     } catch (error) {
       console.error('Ошибка загрузки профиля:', error);
     }
@@ -80,6 +80,25 @@ const Products = () => {
     navigate(`/products/${productId}`);
   };
 
+  const handleEditProduct = (productId) => {
+    navigate(`/edit-product/${productId}`);
+  };
+
+  const handleDeleteProduct = async (productId) => {
+    const token = localStorage.getItem('access_token');
+    try {
+      await axios.delete(`https://sanches.pythonanywhere.com/products/${productId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setProducts(products.filter(product => product.id !== productId));
+      setFilteredProducts(filteredProducts.filter(product => product.id !== productId));
+    } catch (error) {
+      console.error('Ошибка при удалении продукта:', error);
+    }
+  };
+
   if (loading) {
     return <p>Загрузка...</p>;
   }
@@ -104,7 +123,7 @@ const Products = () => {
         </div>
 
         <div className="products-grid">
-          {isSeller && (
+          {(userRole === 'seller' || userRole === 'admin') && (
               <div className="product-card add-product-card" onClick={handleAddProduct}>
                 <FaPlusCircle className="add-product-icon" />
                 <h3 className="add-product-text">Добавить продукт</h3>
@@ -126,6 +145,16 @@ const Products = () => {
                 <h3 className="product-name">{product.name}</h3>
                 <p className="product-price">${product.price}</p>
                 <p className="product-description">{product.description}</p>
+                {(userRole === 'seller' || userRole === 'admin') && (
+                    <div className="product-actions">
+                      <button onClick={() => handleEditProduct(product.id)} className="edit-button">
+                        <FaEdit /> Изменить
+                      </button>
+                      <button onClick={(e) => { e.stopPropagation(); handleDeleteProduct(product.id); }} className="delete-button">
+                        <FaTrash /> Удалить
+                      </button>
+                    </div>
+                )}
               </div>
           ))}
         </div>
