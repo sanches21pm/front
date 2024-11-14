@@ -40,3 +40,16 @@ p {
   color: red;
   text-align: center;
 }
+.delete-account-button {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.delete-account-button:hover {
+  background-color: #e60000;
+}

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './Profile.css';
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   // Получение профиля при загрузке компонента
   useEffect(() => {
@@ -47,6 +49,26 @@ const Profile = () => {
     }
   };
 
+  // Удаление аккаунта
+  const handleDeleteAccount = async () => {
+    const confirmDelete = window.confirm('Вы уверены, что хотите удалить свой аккаунт? Это действие необратимо.');
+    if (!confirmDelete) return;
+
+    try {
+      const token = localStorage.getItem('access_token');
+      await axios.delete('https://sanches.pythonanywhere.com/profile', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      localStorage.removeItem('access_token');
+      setMessage('Аккаунт успешно удалён!');
+      setTimeout(() => navigate('/'), 1500); // Переход на главную страницу через 1.5 секунды
+    } catch (error) {
+      setMessage('Ошибка при удалении аккаунта.');
+    }
+  };
+
   return (
       <div className="profile-container">
         <h2>Профиль пользователя</h2>
@@ -54,12 +76,7 @@ const Profile = () => {
             <form onSubmit={handleUpdateEmail}>
               <div className="form-group">
                 <label htmlFor="username">Имя пользователя:</label>
-                <input
-                    type="text"
-                    id="username"
-                    value={profile.username}
-                    disabled
-                />
+                <input type="text" id="username" value={profile.username} disabled />
               </div>
               <div className="form-group">
                 <label htmlFor="email">Email:</label>
@@ -73,14 +90,12 @@ const Profile = () => {
               </div>
               <div className="form-group">
                 <label htmlFor="role">Роль:</label>
-                <input
-                    type="text"
-                    id="role"
-                    value={profile.role}
-                    disabled
-                />
+                <input type="text" id="role" value={profile.role} disabled />
               </div>
               <button type="submit">Обновить Email</button>
+              <button type="button" className="delete-account-button" onClick={handleDeleteAccount}>
+                Удалить аккаунт
+              </button>
             </form>
         ) : (
             <p>Загрузка...</p>
