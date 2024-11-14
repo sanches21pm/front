@@ -20,6 +20,8 @@ import AddProduct from './pages/Products/AddProduct';
 import AddCategory from './pages/AddCategory/AddCategory';
 import AboutUs from './pages/AboutUs/AboutUs';
 import EditProduct from './pages/Products/EditProduct.jsx';
+import EditCategory from './pages/EditCategory/EditCategory';
+
 
 
 const App = () => {
@@ -58,6 +60,8 @@ const App = () => {
             <Route path="/add-category" element={<AddCategory />} />
             <Route path="/about-us" element={<AboutUs />} /> {/* Add the About Us route */}
             <Route path="/edit-product/:product_id" element={<EditProduct />} /> {/* New Route */}
+            <Route path="/edit-category/:category_id" element={<EditCategory />} />
+
           </Routes>
         </Router>
       </ThemeProvider>
