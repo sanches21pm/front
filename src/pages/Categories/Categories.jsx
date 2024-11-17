@@ -101,7 +101,6 @@ const Categories = () => {
           )}
           {categories.map((category) => (
               <div className="category-card" key={category.id}>
-                <img src={category.image || 'https://via.placeholder.com/150'} alt={category.name} className="category-image" />
                 <h3 className="category-name">{category.name}</h3>
                 <p className="category-description">{category.description}</p>
                 {isAdmin && (
