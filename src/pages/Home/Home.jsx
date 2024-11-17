@@ -4,7 +4,7 @@ import './Home.css';
 const Home = () => {
   return (
     <div className="home-container">
-      <h1>Welcome to the App</h1>
+      <h1>Добро пожаловать в Наш Супермаркет</h1>
     </div>
   );
 };
