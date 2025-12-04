@@ -1,8 +1,48 @@
-# React + Vite
+# React + Vite Frontend ⚛️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Современный React frontend с использованием Vite и горячей перезагрузки (HMR).
 
-Currently, two official plugins are available:
+## Технический стек
+React 18 • Vite • JavaScript • ESLint
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Быстрый старт
+
+Клонировать репозиторий
+git clone https://github.com/sanches21pm/front.git
+cd front
+
+Установить зависимости
+npm install
+
+Запустить dev сервер
+npm run dev
+
+Создать билд для продакшена
+npm run build
+
+text
+
+## Backend API
+Flask сервер в репозитории [github.com/sanches21pm/flask_back](https://github.com/sanches21pm/flask_back)
+
+## Особенности
+- React 18 с использованием Hooks
+- Vite с горячей перезагрузкой
+- ESLint и Prettier для форматирования кода
+- Адаптивный дизайн
+- Интеграция с backend API
+
+## Структура проекта
+front/
+├── src/
+│ ├── components/ # React компоненты
+│ ├── pages/ # Страницы
+│ ├── services/ # API запросы
+│ └── App.jsx
+├── vite.config.js
+├── package.json
+└── README.md
+
+text
+
+Fullstack проект • React • Vite • Современный JavaScript
